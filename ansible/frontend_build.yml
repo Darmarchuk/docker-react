@@ -1,0 +1,37 @@
+---
+#ansible-playbook -i /home/CiCd_user/rwa-devops/ansible/inventories/environments/st_mid/hosts  /home/CiCd_user/rwa-devops/ansible/playbooks/sas_build/create_release.yml \
+#--ask-become-pass --ask-vault-pass --extra-vars "env=ift_mid" --skip-tags "clear,meta"
+
+# ansible-playbook   /home/CiCd_user/rwa-devops/ansible/playbooks/sas_build/create_release.yml --ask-become-pass --ask-vault-pass --extra-vars "run_check_mode='' env=ift_calc "  --extra-vars  @./ansible/playbooks/sas_build/secret.yml --skip-tags "clear,meta"
+# sudo scp -rp CiCd_user@d5rwac-apc006lk.corp.dev.vtb:"/app/dist/rrm_deploy.run" /app/dist
+# sudo scp -rp CiCd_user@d5rwac-apc006lk.corp.dev.vtb:"/app/dist/oracle_client.zip" /app/dist
+
+
+#ansible-playbook   /home/CiCd_user/rwa-devops/ansible/playbooks/sas_build/create_release.yml --ask-become-pass --ask-vault-pass --extra-vars "run_check_mode='' env=dev_calc "  --extra-vars  @./ansible/playbooks/sas_build/secret.yml --skip-tags "clear,meta" --extra-vars  @./configs/ift_web/secret.yml
+
+- name: This play create release for RRM
+  hosts: dev
+  become: yes
+  gather_facts: yes
+  vars:   
+    env: ift
+    artifact_name: rwa_release
+    release_version: 0
+    objects: /RWA_Jobs /WEB_API /DWH_DWF /DWH_DB
+    GTILAB_GROUP_ID: "{{ env.split('_')[0] }}_ECL"
+
+
+#   vars_prompt:   
+
+    # - name: NEXUS_PWD
+    #   prompt: NEXUS PWD
+
+  tasks:
+
+    - name: Build image and with buildargs
+      docker_image:
+        path: /app/lessons/deploy_project/frontend
+        dockerfile: Dockerfile.dev
+        name: node
+
+
