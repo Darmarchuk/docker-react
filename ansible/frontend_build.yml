@@ -11,7 +11,7 @@
 
 - name: This play create release for RRM
   hosts: dev
-  become: yes
+  #become: yes
   gather_facts: yes
   vars:   
     env: ift
