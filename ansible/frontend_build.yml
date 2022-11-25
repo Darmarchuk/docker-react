@@ -33,7 +33,7 @@
           - openshift
           - pyyaml
           - kubernetes 
-      delegate_to: localhost
+      
 
     - name: Build image and with buildargs
       docker_image:
