@@ -26,13 +26,13 @@
     #   prompt: NEXUS PWD
 
   pre_tasks:
-  
-  - name: install pre-requisites
-    pip:
-    - name:
-        - openshift
-        - pyyaml
-        - kubernetes 
+
+    - name: install pre-requisites
+      pip:
+      - name:
+          - openshift
+          - pyyaml
+          - kubernetes 
 
     - name: Build image and with buildargs
       docker_image:
