@@ -2,18 +2,13 @@
 [dev]
 host.docker.internal ansible_host=host.docker.internal
 
-[mid_servers:children]
-dev
-
-[web_wervers:children]
-dev
 
 [dev:vars]
 prefix=
 env=dev
 ansible_ssh_user=armar
 ansible_port=22
-ansible_connection=sh
+ansible_connection=ssh
 host_key_checking=False
 ansible_shell_type=sh
 ansible_winrm_server_cert_validation=ignore
