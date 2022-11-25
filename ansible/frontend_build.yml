@@ -41,4 +41,7 @@
         state: started
         restart: yes
         command: npm run test -- --coverage
+      register: test_output
+
+    - debug: var=test_output
 
