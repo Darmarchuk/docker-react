@@ -32,6 +32,13 @@
       docker_image:
         path: /app/lessons/deploy_project/frontend
         dockerfile: Dockerfile.dev
-        name: node
+        name: node_dev
 
+    - name: Restart a container and run tests
+      docker_container:
+        name: frontend
+        image: node_dev
+        state: started
+        restart: yes
+        command: npm run test -- --coverage
 
