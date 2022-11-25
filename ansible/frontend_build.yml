@@ -14,7 +14,7 @@
   #become: yes
   gather_facts: yes
   vars:   
-    ansible_python_interpreter: '{{ ansible_playbook_python }}'
+    #ansible_python_interpreter: '{{ ansible_playbook_python }}'
     image_name: node_dev
     image_tag: 1.0
     replicas: 4
@@ -26,6 +26,13 @@
     #   prompt: NEXUS PWD
 
   pre_tasks:
+  
+  - name: install pre-requisites
+    pip:
+    - name:
+        - openshift
+        - pyyaml
+        - kubernetes 
 
     - name: Build image and with buildargs
       docker_image:
@@ -57,6 +64,14 @@
 
   tasks:
 
+
+    - name: get existing image hash.
+      shell: |
+        eval $(minikube docker-env)
+        docker images -q {{ image_name }}
+      register: image_hash
+      changed_when: false  
+
     - name: create a deployment for Hello Go.
       k8s:
         state: present
@@ -81,7 +96,7 @@
                   image: "{{ image_name }}:{{ image_tag }}"
                   imagePullPolicy: IfNotPresent
                   ports:
-                  - containerPort: 8181
+                  - containerPort: 3000
 
     - name: create a Service for Hello Go.
       k8s:
