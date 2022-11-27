@@ -8,12 +8,13 @@ services:
     image: jenkins/jenkins:lts
     ports:
       - "8081:8080"
-      - "5000:5000"
+      - "5000:5000"      
+      - "80:80"      
     volumes:
       - /app/jenkins_home:/var/jenkins_home
     extra_hosts:
       - host.docker.internal:host-gateway
-    #host.docker.internal:127.0.0.1 for linux      
+    #host.docker.internal:127.0.0.1 for linux    
     #network_mode: host
  #   networks:
   #    - net
