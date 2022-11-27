@@ -33,13 +33,26 @@
           - openshift
           - pyyaml
           - kubernetes 
-      
 
-    - name: Build image and with buildargs
-      docker_image:
-        path: /app/lessons/deploy_project/frontend
-        dockerfile: Dockerfile.dev
-        name: "{{ image_name }}:{{ image_tag }}"
+    - name: get existing image hash.
+      shell: |
+        eval $(minikube docker-env)
+        docker images -q {{ image_name }}
+      register: image_hash
+      changed_when: false  
+
+    - name: build image if it's not already built. 
+      shell: | 
+        eval $(minikube docker-env)
+        docker build -t {{ image_name }}:{{ image_tag }} -f Dockerfile.dev .
+      chdir: /app/lessons/deploy_project/frontend
+      # when: not image_hash.stdout
+
+    # - name: Build image and with buildargs
+    #   docker_image:
+    #     path: /app/lessons/deploy_project/frontend
+    #     dockerfile: Dockerfile.dev
+    #     name: "{{ image_name }}:{{ image_tag }}"
 
     - name: Restart a container and run tests
       docker_container:
@@ -75,12 +88,7 @@
   tasks:
 
 
-    - name: get existing image hash.
-      shell: |
-        eval $(minikube docker-env)
-        docker images -q {{ image_name }}
-      register: image_hash
-      changed_when: false  
+
 
     - name: create a deployment for Hello Go.
       k8s:
