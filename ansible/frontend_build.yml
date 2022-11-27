@@ -54,7 +54,8 @@
     - name: stop a container and run tests
       docker_container:
         name: frontend        
-        state: stopped        
+        state: stopped
+        force_kill: yes       
       register: test_output
     
     
