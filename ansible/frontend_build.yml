@@ -45,8 +45,9 @@
       shell: | 
         eval $(minikube docker-env)
         docker build -t {{ image_name }}:{{ image_tag }} -f Dockerfile.dev .
-      chdir: /app/lessons/deploy_project/frontend
-      # when: not image_hash.stdout
+      args:
+        chdir: /app/lessons/deploy_project/frontend
+    # when: not image_hash.stdout
 
     # - name: Build image and with buildargs
     #   docker_image:
